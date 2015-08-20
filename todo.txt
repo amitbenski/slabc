@@ -1,0 +1,14 @@
+to update from computer to git hub:
+
+git add -A
+git commit -m "yu message"
+git push slabc master
+
+
+
+
+
+
+to update computer from github:
+
+git pull slabc master
