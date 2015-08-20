@@ -157,6 +157,9 @@ void playerTurn(int player)
 	}
 
 }
+
+// thisnis comment
+
 /**
  * @ brief run a nim game between two player until one of the boxes is empty
  * @ return 0 - exit the program.
