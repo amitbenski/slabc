@@ -96,7 +96,7 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long new_length)
 {
-	str->string = (char*)realloc(str->string, new_length+1);
+	str->string = (char*)realloc(str->string, new_length + 1);
 	if (str->string == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -132,18 +132,22 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
  * RETURN VALUE:
  *  @return MYSTRING_ERROE if tried to realloc and failed and true otherwise
  */
-static MyStringRetVal updateMyString(MyString *str,const char* string)
+static MyStringRetVal updateMyString(MyString *str, const char* string)
 {
+	if (string == NULL)
+	{
+		return MYSTRING_ERROR;
+	}
 	unsigned long new_length = getLength(string);
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(new_length+1);
+		str->string  = (char*)malloc(new_length + 1);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
 	}
-	else if (big_Difference(str->length,new_length))
+	else if (big_Difference(str->length, new_length))
 	{
 		if (realocate(str, new_length) == MYSTRING_ERROR)
 		{
@@ -232,7 +236,7 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 			tempIndex ++;
 		}
 	}
-	MyStringRetVal res = myStringSetFromMyString(str,tempString);
+	MyStringRetVal res = myStringSetFromMyString(str, tempString);
 	myStringFree(tempString);
 	return res;
 }
@@ -430,13 +434,13 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 	int i = (int)(dest->length);
 	if (dest->string == NULL)
 	{
-		dest->string = (char*)malloc(newLength);
+		dest->string = (char*)malloc(newLength+1);
 		if (dest->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
 	}
-	if (big_Difference(dest->length,newLength))
+	if (big_Difference(dest->length, newLength))
 	{
 		if (realocate(dest, newLength) == MYSTRING_ERROR)
 		{
@@ -474,7 +478,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(newString, str1->string, str1->length);
+	memcpy(newString, str1->string, str1->length+1);
 	int j = 0;
 	for (int i = (int)(str1->length) ; i < (int)(newLength); i++)
 	{
@@ -482,7 +486,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		newString[i] = str2->string[j];
 		j++;
 	}
-	MyStringRetVal res = myStringSetFromCString(result,newString);
+	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
 }
@@ -915,7 +919,7 @@ static void testMyStringToCString(MyString* testString, char* str)
  * @param expectedResult expected string result
  * RETURN VALUE: void
   */
-static void testMyStringCat(MyString* str1, MyString* str2, char*expectedResult)
+static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult)
 {
 	puts("----------------------------------------------------------------------------");
 	myStringCat(str1,str2);
