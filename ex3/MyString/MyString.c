@@ -37,13 +37,13 @@ static unsigned long getLength(const char* str)
  */
 MyString * myStringAlloc()
 {
-	MyString *newString = malloc(sizeof(MyString)); // memory allocation for MyString struct
+	MyString *newString = (MyString*)malloc(sizeof(MyString)); // memory allocation for MyString
+	// struct
 	if (newString == NULL)
 	{
 		return NULL;
 	}
-	newString -> string = malloc(0);// memory allocation for str
-	newString -> string = EMPTY_STR;
+	newString -> string = NULL;
 	newString -> length = 0;
 	newString -> size = 0;
 	return newString;
@@ -59,6 +59,7 @@ void myStringFree(MyString *str)
 	if (str != NULL)
 	{
 		free(str -> string);
+		str->string = NULL;
 		free(str);
 	}
 }
@@ -95,7 +96,7 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long new_length)
 {
-	str->string = realloc(str->string, new_length+1);
+	str->string = (char*)realloc(str->string, new_length+1);
 	if (str->string == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -134,7 +135,15 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
 static MyStringRetVal updateMyString(MyString *str,const char* string)
 {
 	unsigned long new_length = getLength(string);
-	if (big_Difference(str->length,new_length))
+	if (str->string == NULL)
+	{
+		str->string  = (char*)malloc(new_length+1);
+		if (str->string == NULL)
+		{
+			return MYSTRING_ERROR;
+		}
+	}
+	else if (big_Difference(str->length,new_length))
 	{
 		if (realocate(str, new_length) == MYSTRING_ERROR)
 		{
@@ -223,9 +232,9 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 			tempIndex ++;
 		}
 	}
-	myStringSetFromMyString(str,tempString);
-	free(tempString);
-	return MYSTRING_SUCCESS;
+	MyStringRetVal res = myStringSetFromMyString(str,tempString);
+	myStringFree(tempString);
+	return res;
 }
 
 /**
@@ -278,7 +287,7 @@ int nDigits(int num)
  */
 char* intToStr(int num)
 {
-	char* str;
+	char* str = NULL;
 	unsigned long dCount = 0;
 	int negativeNum = FALSE;
 
@@ -290,8 +299,11 @@ char* intToStr(int num)
 	}
 
 	dCount += nDigits(num);
-	str = malloc(dCount + 1);
-
+	str = (char*)malloc(dCount + 1);
+	if (str == NULL)
+	{
+		return NULL;
+	}
 	str[dCount] = EOL;
 
 	while(num > ZERO)
@@ -324,7 +336,10 @@ MyStringRetVal myStringSetFromInt(MyString *str, int n)
 		return MYSTRING_ERROR;
 	}
 	char* cString = intToStr(n);
-	return (myStringSetFromCString(str,cString));
+
+	MyStringRetVal res = (myStringSetFromCString(str,cString));
+	free(cString);
+	return res;
 }
 
 
@@ -438,7 +453,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = malloc(newLength);
+	char* newString = (char*)malloc(newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -1089,7 +1104,7 @@ static void testMyStringCoustomSort(MyString* str1, MyString* str2, MyString* st
 sortedArray[])
 {
 	puts("----------------------------------------------------------------------------");
-	int sizeArray = 3;
+	unsigned long sizeArray = 3;
 	bool res = true;
 	MyString* arr[3] = {str3,str2,str1};
 	printf("the given array is:\n");
@@ -1129,7 +1144,7 @@ sortedArray[])
 static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char* sortedArray[])
 {
 	puts("----------------------------------------------------------------------------");
-	int sizeArray = 3;
+	unsigned long sizeArray = 3;
 	bool res = true;
 	MyString* arr[3] = {str1, str2, str3};
 	printf("the given array is:\n");
@@ -1138,7 +1153,7 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char
 		printf("%s, ",arr[i]->string);
 	}
 
-	myStringSort(arr, sizeArray); //sort the array
+	myStringSort(arr, 3); //sort the array
 
 	printf("\nthe array after sort is:\n");
 	for (int j = 0; j < sizeArray; j++)
