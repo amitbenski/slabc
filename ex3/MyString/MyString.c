@@ -944,16 +944,19 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, char*expectedResult)
 {
 	puts("----------------------------------------------------------------------------");
-	myStringCatTo(str1, str2, str3);
-	if (strcmp(str3->string, expectedResult))
+	MyStringRetVal res = myStringCatTo(str1, str2, str3);
+	if (res == MYSTRING_SUCCESS)
 	{
-		printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
-			   str3->string);
-	}
-	else
-	{
-		printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
-			   str3->string);
+		if (strcmp(str3->string, expectedResult))
+		{
+			printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
+				   str3->string);
+		}
+		else
+		{
+			printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
+				   str3->string);
+		}
 	}
 }
 
@@ -1214,7 +1217,7 @@ int main()
 		//Filter
 		testMyStringFilter(str1, "helloworld");
 		//fromInt
-		testMyStringSetFromInt(str2,500, "500");
+		testMyStringSetFromInt(str2, 500, "500");
 		//clone
 		testMyStringClone(str1,str3);
 		//ToInt
@@ -1243,9 +1246,9 @@ int main()
 		testMyStringCustomEqual(str1,str3, EQUAL_STRS);
 		testMyStringCustomEqual(str1,str2, NOT_EQUAL_STRS);
 		//memUsage
-		testMyStringMemUsage(str1,34);
+		testMyStringMemUsage(str1, 34);
 		//myStringLen
-		testMyStringLen(str1,10);
+		testMyStringLen(str1, 10);
 		//Write
 		testMyStringWrite(str1);
 		//MyStringSort
