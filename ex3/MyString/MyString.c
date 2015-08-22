@@ -1108,7 +1108,7 @@ sortedArray[])
 	bool res = true;
 	MyString* arr[3] = {str3,str2,str1};
 	printf("the given array is:\n");
-	for (int i = 0; i < sizeArray; i++)
+	for (int i = 0; i < (int)sizeArray; i++)
 	{
 		printf("%s, ",arr[i]->string);
 	}
@@ -1116,7 +1116,7 @@ sortedArray[])
 	myStringCoustomSort(arr, sizeArray, (void*)wrapperMyStringCompare);////sort the array
 
 	printf("\nthe array after sort is:\n");
-	for (int j = 0; j < sizeArray; j++)
+	for (int j = 0; j < (int)sizeArray; j++)
 	{
 		printf("%s, ",arr[j]->string);
 		if (sortedArray[j] != arr[j]->string)
@@ -1148,7 +1148,7 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char
 	bool res = true;
 	MyString* arr[3] = {str1, str2, str3};
 	printf("the given array is:\n");
-	for (int i = 0; i < sizeArray; i++)
+	for (int i = 0; i < (int)sizeArray; i++)
 	{
 		printf("%s, ",arr[i]->string);
 	}
@@ -1156,7 +1156,7 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char
 	myStringSort(arr, 3); //sort the array
 
 	printf("\nthe array after sort is:\n");
-	for (int j = 0; j < sizeArray; j++)
+	for (int j = 0; j < (int)sizeArray; j++)
 	{
 		printf("%s, ",arr[j]->string);
 		if (sortedArray[j] != arr[j]->string)
