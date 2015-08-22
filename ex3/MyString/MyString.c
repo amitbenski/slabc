@@ -400,7 +400,16 @@ char * myStringToCString(const MyString *str)
 	{
 		return NULL;
 	}
-	return str->string;
+	char* newString = malloc(str->length + 1);
+	if (newString == NULL)
+	{
+		return NULL;
+	}
+	for (int i = 0; i < (int)str->length; i++)
+	{
+		newString[i] = str->string[i];
+	}
+	return newString;
 }
 
 
@@ -419,6 +428,14 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 	}
 	unsigned long newLength = src->length + dest->length;
 	int i = (int)(dest->length);
+	if (dest->string == NULL)
+	{
+		dest->string = (char*)malloc(newLength);
+		if (dest->string == NULL)
+		{
+			return MYSTRING_ERROR;
+		}
+	}
 	if (big_Difference(dest->length,newLength))
 	{
 		if (realocate(dest, newLength) == MYSTRING_ERROR)
@@ -435,7 +452,6 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 	}
 	return MYSTRING_SUCCESS;
 }
-
 /**
  * @brief Sets result to be the concatenation of str1 and str2.
  * 	result should be initially allocated by the caller.
@@ -453,7 +469,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc(newLength);
+	char* newString = (char*)malloc((newLength)+1);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -467,6 +483,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		j++;
 	}
 	MyStringRetVal res = myStringSetFromCString(result,newString);
+	free(newString);
 	return res;
 }
 
@@ -889,6 +906,7 @@ static void testMyStringToCString(MyString* testString, char* str)
 		printf("MyStringToCString method Succeed, string expected %s, and is %s\n", str,
 			   result);
 	}
+	free(result);
 }
 
 /**
@@ -922,7 +940,7 @@ static void testMyStringCat(MyString* str1, MyString* str2, char*expectedResult)
 static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, char*expectedResult)
 {
 	puts("----------------------------------------------------------------------------");
-	myStringCatTo(str1,str2,str3);
+	myStringCatTo(str1, str2, str3);
 	if (strcmp(str3->string, expectedResult))
 	{
 		printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
