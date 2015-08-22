@@ -98,9 +98,9 @@ MyString * myStringClone(const MyString *str)
 	}
 }
 
-static MyStringRetVal realocate(MyString *str, unsigned long new_length)
+static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 {
-	char* reallocTest = (char*)realloc(str->string, new_length + 1);
+	char* reallocTest = (char*)realloc(str->string, newLength + 1);
 	if (reallocTest == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -108,9 +108,9 @@ static MyStringRetVal realocate(MyString *str, unsigned long new_length)
 
 	else
 	{
-		free(str->string);
 		str->string = reallocTest;
-		str->size = new_length;
+		memset(str->string, 0, newLength);
+		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
 }
@@ -144,23 +144,24 @@ static MyStringRetVal updateMyString(MyString *str, const char* string)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long new_length = getLength(string);
+	unsigned long newLength = getLength(string);
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(new_length + 1);
+		str->string  = (char*)malloc(newLength + 1);
+		memset(str->string, 0, newLength);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
 	}
-	else if (big_Difference(str->length, new_length))
+	else if (big_Difference(str->length, newLength))
 	{
-		if (realocate(str, new_length) == MYSTRING_ERROR)
+		if (realocate(str, newLength) == MYSTRING_ERROR)
 		{
 			return MYSTRING_ERROR;
 		}
 	}
-	str->length = new_length;
+	str->length = newLength;
 	return MYSTRING_SUCCESS;
 }
 
