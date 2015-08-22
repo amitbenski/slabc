@@ -776,14 +776,16 @@ static bool testAllocateAndFree()
 {
 	puts("----------------------------------------------------------------------------");
 	MyString* testStr = myStringAlloc();
-	if (testStr != NULL)
+	if (testStr == NULL)
 	{
-		if (testStr->length != EMPTY_STR)
-		{
-			printf("myStringAlloc method Failed, length expected %d, but is %lu",EMPTY_STR,
-				   testStr->length);
-			return false;
-		}
+		return false;
+	}
+	if (testStr->length != EMPTY_STR)
+	{
+		printf("myStringAlloc method Failed, length expected %d, but is %lu",EMPTY_STR,
+			   testStr->length);
+		myStringFree(testStr);
+		return false;
 	}
 	myStringFree(testStr);
 	printf("allocate and free Succeed\n");

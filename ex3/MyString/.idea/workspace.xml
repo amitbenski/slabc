@@ -12,6 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ac983b7-d5ea-4669-96a3-7afba66b722b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyString.c" afterPath="$PROJECT_DIR$/MyString.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MyString.iws" />
@@ -68,8 +69,8 @@
       <file leaf-file-name="MyString.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyString.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.0415756">
-              <caret line="160" column="20" selection-start-line="160" selection-start-column="20" selection-end-line="160" selection-end-column="20" />
+            <state vertical-scroll-proportion="-0.21225382">
+              <caret line="788" column="4" selection-start-line="788" selection-start-column="4" selection-end-line="788" selection-end-column="4" />
               <folding>
                 <element signature="e#74#95#0" expanded="true" />
               </folding>
@@ -278,7 +279,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440263957482</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="sdfjdggd">
+      <created>1440263961547</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1440263961547</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -817,8 +824,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyString.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0415756">
-          <caret line="160" column="20" selection-start-line="160" selection-start-column="20" selection-end-line="160" selection-end-column="20" />
+        <state vertical-scroll-proportion="-0.21225382">
+          <caret line="788" column="4" selection-start-line="788" selection-start-column="4" selection-end-line="788" selection-end-column="4" />
           <folding>
             <element signature="e#74#95#0" expanded="true" />
           </folding>
