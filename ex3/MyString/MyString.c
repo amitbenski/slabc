@@ -1295,6 +1295,7 @@ int main()
 		myStringFree(str1);
 		myStringFree(str2);
 		myStringFree(str3);
+		puts("HOLLA");
 	}
 	return FINISH;
 }
