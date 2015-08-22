@@ -108,6 +108,7 @@ static MyStringRetVal realocate(MyString *str, unsigned long new_length)
 
 	else
 	{
+		free(str->string);
 		str->string = reallocTest;
 		str->size = new_length;
 		return MYSTRING_SUCCESS;

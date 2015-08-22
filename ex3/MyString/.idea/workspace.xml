@@ -13,7 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9ac983b7-d5ea-4669-96a3-7afba66b722b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyString.c" afterPath="$PROJECT_DIR$/MyString.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyString.h" afterPath="$PROJECT_DIR$/MyString.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MyString.iws" />
@@ -70,8 +69,8 @@
       <file leaf-file-name="MyString.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyString.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.995699">
-              <caret line="529" column="9" selection-start-line="529" selection-start-column="9" selection-end-line="529" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.6989247">
+              <caret line="110" column="26" selection-start-line="110" selection-start-column="26" selection-end-line="110" selection-end-column="26" />
               <folding>
                 <element signature="e#74#95#0" expanded="true" />
               </folding>
@@ -262,7 +261,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440255952614</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="sdfjdggd">
+      <created>1440261021951</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1440261021951</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -326,7 +331,8 @@
     <MESSAGE value="sadijasidfj" />
     <MESSAGE value="sadijasidfjdg" />
     <MESSAGE value="sadijasidfjdggd" />
-    <option name="LAST_COMMIT_MESSAGE" value="sadijasidfjdggd" />
+    <MESSAGE value="sdfjdggd" />
+    <option name="LAST_COMMIT_MESSAGE" value="sdfjdggd" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -800,8 +806,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyString.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.995699">
-          <caret line="529" column="9" selection-start-line="529" selection-start-column="9" selection-end-line="529" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.6989247">
+          <caret line="110" column="26" selection-start-line="110" selection-start-column="26" selection-end-line="110" selection-end-column="26" />
           <folding>
             <element signature="e#74#95#0" expanded="true" />
           </folding>
