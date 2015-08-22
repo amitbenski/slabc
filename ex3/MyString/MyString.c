@@ -148,11 +148,11 @@ static MyStringRetVal updateMyString(MyString *str, const char* string)
 	if (str->string == NULL)
 	{
 		str->string  = (char*)malloc(newLength + 1);
-		memset(str->string, 0, newLength);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
+		memset(str->string, 0, newLength);
 	}
 	else if (big_Difference(str->length, newLength))
 	{
