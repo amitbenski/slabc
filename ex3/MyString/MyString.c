@@ -492,7 +492,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength));
+	char* newString = (char*)malloc((newLength)+1);
 	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
@@ -506,6 +506,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		j++;
 	}
 	newString[newLength] = EOL;
+	puts(newString);
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
@@ -653,7 +654,6 @@ int myStringEqual(const MyString *str1, const MyString *str2)
 		return NOT_EQUAL_STRS;
 	}
 	int i = 0;
-	int result = 0;
 	while (i < (int)str1->length)
 	{
 		if (str1->string[i] != str2->string[i])
