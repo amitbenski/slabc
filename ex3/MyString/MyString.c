@@ -108,10 +108,10 @@ static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 
 	else
 	{
-		for (int i = (int)str->length; i < (int)newLength; i++)
-		{
-			str->string[i] = '0';
-		}
+//		for (int i = (int)str->length; i < (int)newLength; i++)
+//		{
+//			str->string[i] = '0';
+//		}
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
@@ -126,7 +126,7 @@ static MyStringRetVal realocate(MyString *str, unsigned long newLength)
  */
 static unsigned long big_Difference(unsigned long len1, unsigned long len2)
 {
-	if (((len1 / 2) >= len2) || (len2 <= len2))
+	if (((len1 / 2) >= len2) || (len1 < len2))
 	{
 		return TRUE;
 	}
@@ -154,7 +154,7 @@ static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned 
 			return MYSTRING_ERROR;
 		}
 		str->size = newLength;
-		memset(str->string, '0', newLength);
+		//memset(str->string, '0', newLength);
 	}
 	else if (big_Difference(str->length, newLength))
 	{
@@ -180,12 +180,11 @@ MyStringRetVal myStringSetFromMyString(MyString *str, const MyString *other)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	if (updateMyString(str, other->string, other->size) == MYSTRING_ERROR)
+	if (updateMyString(str, other->string, other->length) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(str->string, other->string, str->length+1);
+	memcpy(str->string, other->string, str->length);
 	return MYSTRING_SUCCESS;
 }
 
@@ -225,6 +224,10 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 	}
 	unsigned long newLength = 0;
 	MyString* tempString = myStringAlloc();
+	if (tempString == NULL)
+	{
+		return MYSTRING_ERROR;
+	}
 	for (int i = 0; i < (int)str->length; i++)
 	{
 		if (!filt(&(str->string[i])))
@@ -236,6 +239,7 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 	{
 		return MYSTRING_ERROR;
 	}
+	tempString->length = newLength;
 	int tempIndex = 0;
 	for (int j = 0; j < (int)str->length; j++)
 	{
@@ -529,27 +533,32 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
+	char* str1ToComp = myStringToCString(str1);
+	char* str2ToComp = myStringToCString(str2);
 	int i = 0;
 	while ((i < (int)str1->length) && (i < (int)str2->length)){
 		if (str2->string[i] < str1->string[i])
 		{
 			return COMPARE_STR1_BIGGER;
 		}
-		else if (str1->string[i] < str2->string[i])
+		else if (str1ToComp[i] < str2ToComp[i])
 		{
 			return COMPARE_STR2_BIGGER;
 		}
 		i++;
 	}
-	if (str1->string[i] != EOL)
+	if ((str1->length == i) && (str2->length == i))
 	{
-		return COMPARE_STR1_BIGGER;
+		return COMPARE_EQUAL;
 	}
-	else if (str2->string[i] != EOL)
+	if (str1->length == i)
 	{
 		return COMPARE_STR2_BIGGER;
 	}
-	return COMPARE_EQUAL;
+	else
+	{
+		return COMPARE_STR1_BIGGER;
+	}
 }
 
 int comparator(char char1, char char2)
@@ -580,7 +589,7 @@ int comparator(char char1, char char2)
 int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comparator)(char,
 																						char))
 {
-	if ((str1 == NULL) || (str2 == NULL))
+	if ((str1->string == NULL) || (str2->string == NULL))
 	{
 		return MYSTR_ERROR_CODE;
 	}
@@ -590,6 +599,7 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 	}
 	int i = 0;
 	int result;
+
 	while ((i < (int)str1->length) && (i < (int)str2->length))
 	{
 		result = comparator(str1->string[i], str2->string[i]);
@@ -599,15 +609,18 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 		}
 		i++;
 	}
-	if (str1->string[i] != EOL)
+	if ((str1->length == i) && (str2->length == i))
+	{
+		return COMPARE_EQUAL;
+	}
+	if (str2->length == i)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
-	else if (str2->string[i] != EOL)
+	else
 	{
 		return COMPARE_STR2_BIGGER;
 	}
-	return COMPARE_EQUAL;
 }
 
 /**
@@ -627,20 +640,29 @@ int myStringEqual(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	if ((str1->string == NULL) || (str2->string == NULL))
-	{
-		return MYSTR_ERROR_CODE;
-	}
-	int result = myStringCompare(str1, str2);
-	if (result == COMPARE_EQUAL)
+	if ((str1->string == NULL) && (str2->string == NULL))
 	{
 		return EQUAL_STRS;
 	}
-	else
+	if ((str1->string == NULL) || (str2->string == NULL))
 	{
 		return NOT_EQUAL_STRS;
 	}
-
+	if (str1->length != str2->length)
+	{
+		return NOT_EQUAL_STRS;
+	}
+	int i = 0;
+	int result = 0;
+	while (i < (int)str1->length)
+	{
+		if (str1->string[i] != str2->string[i])
+		{
+			return NOT_EQUAL_STRS;
+		}
+		i++;
+	}
+	return EQUAL_STRS;
 }
 
 /**
@@ -661,23 +683,28 @@ int myStringCustomEqual(const MyString *str1, const MyString *str2, int (*compar
 	{
 		return MYSTR_ERROR_CODE;
 	}
+	if (str1->string == NULL && str2->string == NULL)
+	{
+		return EQUAL_STRS;
+	}
 	if ((str1->string == NULL) || (str2->string == NULL))
 	{
-		return MYSTR_ERROR_CODE;
+		return NOT_EQUAL_STRS;
+	}
+	if (str1->length != str2->length)
+	{
+		return NOT_EQUAL_STRS;
 	}
 	int i = 0;
 	int result;
-	while ((i < (int)str1->length) && (i < (int)str2->length)){
-		result = comparator(str1->string[i],str2->string[i]);
+	while (i < (int)str1->length)
+	{
+		result = comparator(str1->string[i], str2->string[i]);
 		if (result != COMPARE_EQUAL)
 		{
 			return NOT_EQUAL_STRS;
 		}
 		i++;
-	}
-	if ((str1->string[i] != EOL) || (str2->string[i] != EOL))
-	{
-		return NOT_EQUAL_STRS;
 	}
 	return EQUAL_STRS;
 }
@@ -902,16 +929,18 @@ static void testMyStringSetFromInt(MyString* testString,int num,char* numAsStrin
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromInt(testString, num);
-	if (memcmp(testString->string,numAsString,testString->length))
+	char* res = myStringToCString(testString);
+	if (strcmp(res, numAsString))
 	{
 		printf("MyStringSetFromInt method Failed, string expected %s, but is %s\n",numAsString,
-			   testString->string);
+			   res);
 	}
 	else
 	{
 		printf("MyStringSetFromInt method Succeed, string expected %s, and is %s\n",numAsString,
-			   testString->string);
+			   res);
 	}
+	free(res);
 }
 
 /**
