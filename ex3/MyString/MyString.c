@@ -136,7 +136,7 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
 /**
  * @brief get MyString and new string (value),
  * update the length of MyString, and also the size if needed
- * @param len1,len2
+ * @param str to update and newlength to update
  * RETURN VALUE:
  *  @return MYSTRING_ERROE if tried to realloc and failed and true otherwise
  */
@@ -144,7 +144,7 @@ static MyStringRetVal updateMyString(MyString *str, unsigned long newLength)
 {
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(newLength);
+		str->string = (char*)malloc(newLength);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
