@@ -100,7 +100,7 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 {
-	char* reallocTest = (char*)realloc(str->string, newLength + 1);
+	char* reallocTest = (char*)realloc(str->string, newLength);
 	if (reallocTest == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -150,7 +150,7 @@ static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned 
 	}
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(newLength + 1);
+		str->string  = (char*)malloc(newLength);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
@@ -272,7 +272,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(str->string, cString, str->length+1);
+	memcpy(str->string, cString, str->length);
 	return MYSTRING_SUCCESS;
 }
 
@@ -490,19 +490,20 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength)+1);
+	char* newString = (char*)malloc((newLength));
 	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(newString, str1->string, str1->length + 1);
+	memcpy(newString, str1->string, str1->length);
 	int j = 0;
 	for (int i = (int) (str1->length); i < (int) (newLength); i++)
 	{
 		newString[i] = str2->string[j];
 		j++;
 	}
+	newString[newLength] = EOL;
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
