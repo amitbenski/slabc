@@ -100,20 +100,18 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 {
-	char* reallocTest = (char*)realloc(str->string, newLength);
-	if (reallocTest == NULL)
+	str->string = (char*)realloc(str->string, newLength);
+	if (str->string == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
 
 	else
 	{
-		str->string = reallocTest;
 		for (int i = (int)str->length; i < (int)newLength; i++)
 		{
 			str->string[i] = '0';
 		}
-		str->string[newLength]= EOL;
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
