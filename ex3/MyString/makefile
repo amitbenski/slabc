@@ -2,7 +2,7 @@ CC = c99
 FLAGS = -Wextra -Wvla -Wall
 
 tests: MyString.c MyString.h
-	$(CC) -g $(FLAGS) MyString.c -o MyStringTests
+	$(CC) $(FLAGS) MyString.c -o MyStringTests
 	MyStringTests
 	
 clean:
