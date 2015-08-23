@@ -140,12 +140,8 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
  * RETURN VALUE:
  *  @return MYSTRING_ERROE if tried to realloc and failed and true otherwise
  */
-static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned long newLength)
+static MyStringRetVal updateMyString(MyString *str, unsigned long newLength)
 {
-	if (string == NULL)
-	{
-		return MYSTRING_ERROR;
-	}
 	if (str->string == NULL)
 	{
 		str->string  = (char*)malloc(newLength);
@@ -180,7 +176,11 @@ MyStringRetVal myStringSetFromMyString(MyString *str, const MyString *other)
 	{
 		return MYSTRING_ERROR;
 	}
-	if (updateMyString(str, other->string, other->length) == MYSTRING_ERROR)
+	if (other->string == NULL)
+	{
+		return MYSTRING_ERROR;
+	}
+	if (updateMyString(str, other->length) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
@@ -270,7 +270,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 		return MYSTRING_ERROR;
 	}
 	unsigned long newLength = getLength(cString);
-	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
+	if (updateMyString(str, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
@@ -832,12 +832,12 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 	if (strcmp(string1,string2))
 	{
 		printf("myStringSetFromMyString method Failed, string expected %s, but is %s\n",
-			   str1->string, str2->string);
+			   string1, string2);
 	}
 	else
 	{
 		printf("myStringSetFromMyString method Succeed, string expected %s, and is %s\n",
-			   str1->string, str2->string);
+			   string1, string2);
 	}
 	free(string1);
 	free(string2);
@@ -1181,14 +1181,16 @@ static void testMyStringWrite(MyString* str)
 	FILE* stream;
 	stream = fopen("test.txt", WRITE_MODE);
 	MyStringRetVal result = myStringWrite(str,stream);
+	char* wroteString = myStringToCString(str);
 	if (result == MYSTRING_ERROR)
 	{
-		printf("MyStringWrite method Failed, couldnt write %s into stream\n", str->string);
+		printf("MyStringWrite method Failed, couldnt write %s into stream\n", wroteString);
 	}
 	else
 	{
-		printf("MyStringWrite method Succeed, wrote %s into stream\n", str->string);
+		printf("MyStringWrite method Succeed, wrote %s into stream\n", wroteString);
 	}
+	free(wroteString);
 	fclose(stream);
 }
 
