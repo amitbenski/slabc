@@ -100,18 +100,20 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 {
-	str->string = (char*)realloc(str->string, newLength);
-	if (str->string == NULL)
+	char* reallocTest = (char*)realloc(str->string, newLength + 1);
+	if (reallocTest == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
 
 	else
 	{
+		str->string = reallocTest;
 		for (int i = (int)str->length; i < (int)newLength; i++)
 		{
 			str->string[i] = '0';
 		}
+		str->string[newLength]= EOL;
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
@@ -148,7 +150,7 @@ static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned 
 	}
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(newLength);
+		str->string  = (char*)malloc(newLength + 1);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
@@ -270,7 +272,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(str->string, cString, str->length);
+	memcpy(str->string, cString, str->length+1);
 	return MYSTRING_SUCCESS;
 }
 
@@ -488,20 +490,19 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength));
+	char* newString = (char*)malloc((newLength)+1);
 	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(newString, str1->string, str1->length);
+	memcpy(newString, str1->string, str1->length + 1);
 	int j = 0;
 	for (int i = (int) (str1->length); i < (int) (newLength); i++)
 	{
 		newString[i] = str2->string[j];
 		j++;
 	}
-	newString[newLength] = EOL;
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
@@ -541,18 +542,15 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 		}
 		i++;
 	}
-	if (((int)str1->length == i) && ((int)str2->length == i))
-	{
-		return COMPARE_EQUAL;
-	}
-	if (str1->string[i] == i)
-	{
-		return COMPARE_STR2_BIGGER;
-	}
-	else
+	if (str1->string[i] != EOL)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
+	else if (str2->string[i] != EOL)
+	{
+		return COMPARE_STR2_BIGGER;
+	}
+	return COMPARE_EQUAL;
 }
 
 int comparator(char char1, char char2)
@@ -630,17 +628,9 @@ int myStringEqual(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	if ((str1->string == NULL) && (str2->string == NULL))
-	{
-		return EQUAL_STRS;
-	}
 	if ((str1->string == NULL) || (str2->string == NULL))
 	{
-		return NOT_EQUAL_STRS;
-	}
-	if (str1->length != str2->length)
-	{
-		return NOT_EQUAL_STRS;
+		return MYSTR_ERROR_CODE;
 	}
 	int result = myStringCompare(str1, str2);
 	if (result == COMPARE_EQUAL)
@@ -672,24 +662,23 @@ int myStringCustomEqual(const MyString *str1, const MyString *str2, int (*compar
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	if ((str1->string == NULL) && (str2->string == NULL))
-	{
-		return EQUAL_STRS;
-	}
 	if ((str1->string == NULL) || (str2->string == NULL))
 	{
-		return NOT_EQUAL_STRS;
+		return MYSTR_ERROR_CODE;
 	}
 	int i = 0;
 	int result;
-	while ((i < (int)str1->length))
-	{
+	while ((i < (int)str1->length) && (i < (int)str2->length)){
 		result = comparator(str1->string[i],str2->string[i]);
 		if (result != COMPARE_EQUAL)
 		{
 			return NOT_EQUAL_STRS;
 		}
 		i++;
+	}
+	if ((str1->string[i] != EOL) || (str2->string[i] != EOL))
+	{
+		return NOT_EQUAL_STRS;
 	}
 	return EQUAL_STRS;
 }
@@ -728,9 +717,7 @@ unsigned long myStringLen(const MyString *str1)
  */
 MyStringRetVal myStringWrite(const MyString *str, FILE *stream)
 {
-	char* writeString = myStringToCString(str);
-	unsigned long bytesWritten = fwrite(writeString, sizeof(char), str->length, stream);
-	free(writeString);
+	unsigned long bytesWritten = fwrite(str->string, sizeof(char), str->length, stream);
 	if (bytesWritten < str->length)
 	{
 		return MYSTRING_ERROR;
@@ -823,12 +810,12 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 	if (strcmp(string1,string2))
 	{
 		printf("myStringSetFromMyString method Failed, string expected %s, but is %s\n",
-			   string1, string2);
+			   str1->string, str2->string);
 	}
 	else
 	{
 		printf("myStringSetFromMyString method Succeed, string expected %s, and is %s\n",
-			   string1, string2);
+			   str1->string, str2->string);
 	}
 	free(string1);
 	free(string2);
@@ -848,12 +835,12 @@ static void testMyStringClone(MyString* sourceStr, MyString* destStr)
 	if (strcmp(srcString, destString))
 	{
 		printf("myStringClone method Failed, string expected %s, but is %s\n",
-			   srcString, destString);
+			   sourceStr->string, destStr->string);
 	}
 	else
 	{
 		printf("myStringClone method Succeed, string expected %s, and is %s\n",
-			   srcString, destString);
+			   sourceStr->string, destStr->string);
 	}
 	free(destString);
 	free(srcString);
@@ -872,14 +859,14 @@ static void testMyStringFilter(MyString* stringBeforeFilt, char* stringAfterFilt
 	if (strcmp(filtString, stringAfterFilt))
 	{
 		printf("MyStringFilter method Failed, string expected %s, but is %s\n",stringAfterFilt,
-			   filtString);
+			   stringBeforeFilt->string);
 	}
 	else
 	{
 		printf("MyStringFilter method Succeed, string expected %s, and is %s\n",stringAfterFilt,
-			   filtString);
+			   stringBeforeFilt->string);
 	}
-	free(filtString);
+
 }
 
 /**
@@ -896,12 +883,12 @@ static void testMyStringSetFromCString(MyString* sourceString, char* testString)
 	if (strcmp(resString, testString))
 	{
 		printf("MyStringSetFromCString method Failed, string expected %s, but is %s\n",testString,
-			   resString);
+			   sourceString->string);
 	}
 	else
 	{
 		printf("MyStringSetFromCString method Succeed, string expected %s, and is %s\n",testString,
-			   resString);
+			   sourceString->string);
 	}
 	free(resString);
 }
@@ -916,18 +903,16 @@ static void testMyStringSetFromInt(MyString* testString,int num,char* numAsStrin
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromInt(testString, num);
-	char* numString = myStringToCString(testString);
 	if (memcmp(testString->string,numAsString,testString->length))
 	{
 		printf("MyStringSetFromInt method Failed, string expected %s, but is %s\n",numAsString,
-			   numString);
+			   testString->string);
 	}
 	else
 	{
 		printf("MyStringSetFromInt method Succeed, string expected %s, and is %s\n",numAsString,
-			   numString);
+			   testString->string);
 	}
-	free(numString);
 }
 
 /**
@@ -989,12 +974,12 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 	if (strcmp(afterCatString, expectedResult))
 	{
 		printf("testMyStringCat method Failed, string expected %s, but is %s\n", expectedResult,
-			   afterCatString);
+			   str1->string);
 	}
 	else
 	{
 		printf("testMyStringCat method Succeed, string expected %s, and is %s\n", expectedResult,
-			   afterCatString);
+			   str1->string);
 	}
 	free(afterCatString);
 }
@@ -1015,12 +1000,12 @@ static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, ch
 		if (strcmp(testString, expectedResult))
 		{
 			printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
-				   testString);
+				   str3->string);
 		}
 		else
 		{
 			printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
-				   testString);
+				   str3->string);
 		}
 		free(testString);
 	}
@@ -1172,16 +1157,14 @@ static void testMyStringWrite(MyString* str)
 	FILE* stream;
 	stream = fopen("test.txt", WRITE_MODE);
 	MyStringRetVal result = myStringWrite(str,stream);
-	char* wroteString = myStringToCString(str);
 	if (result == MYSTRING_ERROR)
 	{
-		printf("MyStringWrite method Failed, couldnt write %s into stream\n", wroteString);
+		printf("MyStringWrite method Failed, couldnt write %s into stream\n", str->string);
 	}
 	else
 	{
-		printf("MyStringWrite method Succeed, wrote %s into stream\n", wroteString);
+		printf("MyStringWrite method Succeed, wrote %s into stream\n", str->string);
 	}
-	free(wroteString);
 	fclose(stream);
 }
 
