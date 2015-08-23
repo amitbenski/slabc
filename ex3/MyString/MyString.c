@@ -743,7 +743,8 @@ unsigned long myStringLen(const MyString *str1)
  */
 MyStringRetVal myStringWrite(const MyString *str, FILE *stream)
 {
-	unsigned long bytesWritten = fwrite(str->string, sizeof(char), str->length, stream);
+	char* toWrite = myStringToCString(str);
+	unsigned long bytesWritten = fwrite(toWrite, sizeof(char), str->length, stream);
 	if (bytesWritten < str->length)
 	{
 		return MYSTRING_ERROR;
