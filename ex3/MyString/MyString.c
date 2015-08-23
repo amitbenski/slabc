@@ -492,7 +492,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength)+1);
+	char* newString = (char*)malloc((newLength));
 	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
