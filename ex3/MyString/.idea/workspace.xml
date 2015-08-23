@@ -11,8 +11,7 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ac983b7-d5ea-4669-96a3-7afba66b722b" name="Default" comment="sdfjdggd">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyString.c" afterPath="$PROJECT_DIR$/MyString.c" />
+    <list default="true" id="9ac983b7-d5ea-4669-96a3-7afba66b722b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MyString.iws" />
@@ -57,8 +56,8 @@
       <file leaf-file-name="MyString.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyString.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41269842">
-              <caret line="655" column="14" selection-start-line="655" selection-start-column="14" selection-end-line="655" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.1984127">
+              <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
               <folding>
                 <element signature="e#74#95#0" expanded="true" />
               </folding>
@@ -370,7 +369,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440325627592</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="sdfjdggd">
+      <created>1440326127935</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1440326127935</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -899,8 +904,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyString.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41269842">
-          <caret line="655" column="14" selection-start-line="655" selection-start-column="14" selection-end-line="655" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.1984127">
+          <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
           <folding>
             <element signature="e#74#95#0" expanded="true" />
           </folding>
