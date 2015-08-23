@@ -543,11 +543,11 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 		}
 		i++;
 	}
-	if ((str1->length == i) && (str2->length == i))
+	if (((int)str1->length == i) && ((int)str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if (str1->length == i)
+	if ((int)str1->length == i)
 	{
 		return COMPARE_STR2_BIGGER;
 	}
@@ -605,11 +605,11 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 		}
 		i++;
 	}
-	if ((str1->length == i) && (str2->length == i))
+	if (((int)str1->length == i) && ((int)str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if (str2->length == i)
+	if ((int)str2->length == i)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
