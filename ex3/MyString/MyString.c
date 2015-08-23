@@ -269,7 +269,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long newLength = getLength(cString)+1;
+	unsigned long newLength = getLength(cString);
 	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
@@ -447,13 +447,11 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 	int i = (int)(dest->length);
 	if (dest->string == NULL)
 	{
-		dest->string = (char*)malloc(newLength + 1);
+		dest->string = (char*)malloc(newLength);
 		if (dest->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
-		memset(dest->string,'0',newLength);
-		dest->string[newLength] = EOL;
 	}
 	else if (big_Difference(dest->length, newLength))
 	{
@@ -492,7 +490,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength));
+	char* newString = (char*)malloc((newLength)+1);
 	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
@@ -506,7 +504,6 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		j++;
 	}
 	newString[newLength] = EOL;
-	puts(newString);
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
@@ -534,15 +531,13 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	char* str1ToComp = myStringToCString(str1);
-	char* str2ToComp = myStringToCString(str2);
 	int i = 0;
 	while ((i < (int)str1->length) && (i < (int)str2->length)){
 		if (str2->string[i] < str1->string[i])
 		{
 			return COMPARE_STR1_BIGGER;
 		}
-		else if (str1ToComp[i] < str2ToComp[i])
+		else if (str1->string[i] < str2->string[i])
 		{
 			return COMPARE_STR2_BIGGER;
 		}
