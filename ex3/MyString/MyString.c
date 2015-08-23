@@ -109,7 +109,11 @@ static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 	else
 	{
 		str->string = reallocTest;
-		memset(str->string, '0', newLength);
+		for (int i = (int)str->length; i < (int)newLength; i++)
+		{
+			str->string[i] = '0';
+		}
+		str->string[newLength]= EOL;
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
@@ -223,7 +227,6 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 	}
 	unsigned long newLength = 0;
 	MyString* tempString = myStringAlloc();
-
 	for (int i = 0; i < (int)str->length; i++)
 	{
 		if (!filt(&(str->string[i])))
@@ -236,7 +239,6 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 		return MYSTRING_ERROR;
 	}
 	int tempIndex = 0;
-
 	for (int j = 0; j < (int)str->length; j++)
 	{
 		if (!filt(&(str->string[j])))
@@ -448,6 +450,8 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 		{
 			return MYSTRING_ERROR;
 		}
+		memset(dest->string,'0',newLength);
+		dest->string[newLength] = EOL;
 	}
 	else if (big_Difference(dest->length, newLength))
 	{
@@ -813,8 +817,8 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 		printf("myStringSetFromMyString method Succeed, string expected %s, and is %s\n",
 			   str1->string, str2->string);
 	}
-	free(str1);
-	free(str2);
+	free(string1);
+	free(string2);
 }
 
 /**
