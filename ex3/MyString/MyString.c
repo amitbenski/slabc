@@ -269,7 +269,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long newLength = getLength(cString)+1;
+	unsigned long newLength = getLength(cString);
 	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
@@ -534,25 +534,23 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	char* str1ToComp = myStringToCString(str1);
-	char* str2ToComp = myStringToCString(str2);
 	int i = 0;
 	while ((i < (int)str1->length) && (i < (int)str2->length)){
 		if (str2->string[i] < str1->string[i])
 		{
 			return COMPARE_STR1_BIGGER;
 		}
-		else if (str1ToComp[i] < str2ToComp[i])
+		else if (str1->string[i] < str2->string[i])
 		{
 			return COMPARE_STR2_BIGGER;
 		}
 		i++;
 	}
-	if ((str1->length == i) && (str2->length == i))
+	if (((int)str1->length == i) && ((int)str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if (str1->length == i)
+	if ((int)str1->length == i)
 	{
 		return COMPARE_STR2_BIGGER;
 	}
@@ -610,11 +608,11 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 		}
 		i++;
 	}
-	if ((str1->length == i) && (str2->length == i))
+	if (((int)str1->length == i) && ((int)str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if (str2->length == i)
+	if ((int)str2->length == i)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
