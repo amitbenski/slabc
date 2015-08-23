@@ -269,7 +269,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long newLength = getLength(cString);
+	unsigned long newLength = getLength(cString)+1;
 	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
