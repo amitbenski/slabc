@@ -835,12 +835,12 @@ static void testMyStringClone(MyString* sourceStr, MyString* destStr)
 	if (strcmp(srcString, destString))
 	{
 		printf("myStringClone method Failed, string expected %s, but is %s\n",
-			   sourceStr->string, destStr->string);
+			   srcString, destString);
 	}
 	else
 	{
 		printf("myStringClone method Succeed, string expected %s, and is %s\n",
-			   sourceStr->string, destStr->string);
+			   srcString, destString);
 	}
 	free(destString);
 	free(srcString);
@@ -859,14 +859,14 @@ static void testMyStringFilter(MyString* stringBeforeFilt, char* stringAfterFilt
 	if (strcmp(filtString, stringAfterFilt))
 	{
 		printf("MyStringFilter method Failed, string expected %s, but is %s\n",stringAfterFilt,
-			   stringBeforeFilt->string);
+			   filtString);
 	}
 	else
 	{
 		printf("MyStringFilter method Succeed, string expected %s, and is %s\n",stringAfterFilt,
-			   stringBeforeFilt->string);
+			   filtString);
 	}
-
+	free(filtString);
 }
 
 /**
@@ -883,12 +883,12 @@ static void testMyStringSetFromCString(MyString* sourceString, char* testString)
 	if (strcmp(resString, testString))
 	{
 		printf("MyStringSetFromCString method Failed, string expected %s, but is %s\n",testString,
-			   sourceString->string);
+			   resString);
 	}
 	else
 	{
 		printf("MyStringSetFromCString method Succeed, string expected %s, and is %s\n",testString,
-			   sourceString->string);
+			   resString);
 	}
 	free(resString);
 }
@@ -974,12 +974,12 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 	if (strcmp(afterCatString, expectedResult))
 	{
 		printf("testMyStringCat method Failed, string expected %s, but is %s\n", expectedResult,
-			   str1->string);
+			   afterCatString);
 	}
 	else
 	{
 		printf("testMyStringCat method Succeed, string expected %s, and is %s\n", expectedResult,
-			   str1->string);
+			   afterCatString);
 	}
 	free(afterCatString);
 }
@@ -1000,12 +1000,12 @@ static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, ch
 		if (strcmp(testString, expectedResult))
 		{
 			printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
-				   str3->string);
+				   testString);
 		}
 		else
 		{
 			printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
-				   str3->string);
+				   testString);
 		}
 		free(testString);
 	}
