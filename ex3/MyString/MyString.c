@@ -421,6 +421,7 @@ char * myStringToCString(const MyString *str)
 	{
 		newString[i] = str->string[i];
 	}
+	newString[str->length] = EOL;
 	return newString;
 }
 
@@ -978,7 +979,8 @@ static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, ch
 	MyStringRetVal res = myStringCatTo(str1, str2, str3);
 	if (res == MYSTRING_SUCCESS)
 	{
-		if (strcmp(str3->string, expectedResult))
+		char* testString = myStringToCString(str3);
+		if (strcmp(testString, expectedResult))
 		{
 			printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
 				   str3->string);
@@ -988,6 +990,7 @@ static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, ch
 			printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
 				   str3->string);
 		}
+		free(testString);
 	}
 }
 
@@ -1206,7 +1209,9 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3, cha
 	printf("the given array is:\n");
 	for (int i = 0; i < (int)sizeArray; i++)
 	{
-		printf("%s, ",arr[i]->string);
+		char* string = myStringToCString(arr[i]);
+		printf("%s, ",string);
+		free (string);
 	}
 
 	myStringSort(arr, 3); //sort the array
@@ -1214,19 +1219,22 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3, cha
 	printf("\nthe array after sort is:\n");
 	for (int j = 0; j < (int)sizeArray; j++)
 	{
-		printf("%s, ",arr[j]->string);
-		if (sortedArray[j] != arr[j]->string)
+		char* stringAfter = myStringToCString(arr[j]);
+		printf("%s, ",stringAfter);
+		if (sortedArray[j] != stringAfter)
 		{
 			res = false;
 		}
+		free(stringAfter);
 	}
+
 	if (res)
 	{
-		printf("\nMyStringCoustomSort method Failed, the array didnt sort well\n");
+		printf("\nMyStringSort method Failed, the array didnt sort well\n");
 	}
 	else
 	{
-		printf("\nMyStringCoustomSort method Succeed, the array sorted well\n");
+		printf("\nMyStringSort method Succeed, the array sorted well\n");
 	}
 }
 
