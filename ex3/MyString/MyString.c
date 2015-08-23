@@ -801,7 +801,9 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromMyString(str2, str1);
-	if (memcmp(str1->string, str2->string, str1->size))
+	char* string1 = myStringToCString(str1);
+	char* string2 =myStringToCString(str2);
+	if (strcmp(string1,string2))
 	{
 		printf("myStringSetFromMyString method Failed, string expected %s, but is %s\n",
 			   str1->string, str2->string);
@@ -811,6 +813,8 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 		printf("myStringSetFromMyString method Succeed, string expected %s, and is %s\n",
 			   str1->string, str2->string);
 	}
+	free(str1);
+	free(str2);
 }
 
 /**
@@ -822,7 +826,9 @@ static void testMyStringClone(MyString* sourceStr, MyString* destStr)
 {
 	puts("----------------------------------------------------------------------------");
 	destStr = myStringClone(sourceStr);
-	if (memcmp(sourceStr->string, destStr->string, sourceStr->size))
+	char* destString = myStringToCString(destStr);
+	char* srcString = myStringToCString(sourceStr);
+	if (strcmp(srcString, destString))
 	{
 		printf("myStringClone method Failed, string expected %s, but is %s\n",
 			   sourceStr->string, destStr->string);
@@ -832,6 +838,8 @@ static void testMyStringClone(MyString* sourceStr, MyString* destStr)
 		printf("myStringClone method Succeed, string expected %s, and is %s\n",
 			   sourceStr->string, destStr->string);
 	}
+	free(destString);
+	free(srcString);
 }
 
 /**
@@ -843,7 +851,8 @@ static void testMyStringFilter(MyString* stringBeforeFilt, char* stringAfterFilt
 {
 	puts("----------------------------------------------------------------------------");
 	myStringFilter(stringBeforeFilt, filt);
-	if (memcmp(stringBeforeFilt->string, stringAfterFilt, stringBeforeFilt->size))
+	char* filtString = myStringToCString(stringBeforeFilt);
+	if (strcmp(filtString, stringAfterFilt))
 	{
 		printf("MyStringFilter method Failed, string expected %s, but is %s\n",stringAfterFilt,
 			   stringBeforeFilt->string);
@@ -866,7 +875,8 @@ static void testMyStringSetFromCString(MyString* sourceString, char* testString)
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromCString(sourceString, testString);
-	if (memcmp(sourceString->string, testString, sourceString->length))
+	char* resString = myStringToCString(sourceString);
+	if (strcmp(resString, testString))
 	{
 		printf("MyStringSetFromCString method Failed, string expected %s, but is %s\n",testString,
 			   sourceString->string);
@@ -876,6 +886,7 @@ static void testMyStringSetFromCString(MyString* sourceString, char* testString)
 		printf("MyStringSetFromCString method Succeed, string expected %s, and is %s\n",testString,
 			   sourceString->string);
 	}
+	free(resString);
 }
 
 /**
@@ -955,7 +966,8 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 {
 	puts("----------------------------------------------------------------------------");
 	myStringCat(str1,str2);
-	if (strcmp(str1->string, expectedResult))
+	char* afterCatString = myStringToCString(str1);
+	if (strcmp(afterCatString, expectedResult))
 	{
 		printf("testMyStringCat method Failed, string expected %s, but is %s\n", expectedResult,
 			   str1->string);
@@ -965,6 +977,7 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 		printf("testMyStringCat method Succeed, string expected %s, and is %s\n", expectedResult,
 			   str1->string);
 	}
+	free(afterCatString);
 }
 
 /**

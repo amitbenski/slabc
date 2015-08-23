@@ -57,8 +57,8 @@
       <file leaf-file-name="MyString.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyString.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.68817204">
-              <caret line="1227" column="26" selection-start-line="1227" selection-start-column="26" selection-end-line="1227" selection-end-column="26" />
+            <state vertical-scroll-proportion="-0.94623655">
+              <caret line="979" column="25" selection-start-line="979" selection-start-column="25" selection-end-line="979" selection-end-column="25" />
               <folding>
                 <element signature="e#74#95#0" expanded="true" />
               </folding>
@@ -304,7 +304,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440315267911</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="sdfjdggd">
+      <created>1440316433987</created>
+      <option name="number" value="00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1440316433987</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -833,8 +839,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyString.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.68817204">
-          <caret line="1227" column="26" selection-start-line="1227" selection-start-column="26" selection-end-line="1227" selection-end-column="26" />
+        <state vertical-scroll-proportion="-0.94623655">
+          <caret line="979" column="25" selection-start-line="979" selection-start-column="25" selection-end-line="979" selection-end-column="25" />
           <folding>
             <element signature="e#74#95#0" expanded="true" />
           </folding>
