@@ -535,8 +535,8 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 	}
 	char* str1ToComp = myStringToCString(str1);
 	char* str2ToComp = myStringToCString(str2);
-	unsigned long i = 0;
-	while ((i < str1->length) && (i < str2->length)){
+	int i = 0;
+	while ((i < (int)str1->length) && (i < (int)str2->length)){
 		if (str2->string[i] < str1->string[i])
 		{
 			return COMPARE_STR1_BIGGER;
@@ -609,11 +609,11 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 		}
 		i++;
 	}
-	if (((int)str1->length == i) && ((int)str2->length == i))
+	if ((str1->length == i) && (str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if ((int)str2->length == i)
+	if (str2->length == i)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
