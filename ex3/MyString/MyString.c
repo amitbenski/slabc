@@ -1182,7 +1182,9 @@ sortedArray[])
 	printf("the given array is:\n");
 	for (int i = 0; i < (int)sizeArray; i++)
 	{
-		printf("%s, ",arr[i]->string);
+		char* string = myStringToCString(arr[i]);
+		printf("%s, ",string);
+		free(string);
 	}
 
 	myStringCoustomSort(arr, sizeArray, (void*)wrapperMyStringCompare);////sort the array
@@ -1190,11 +1192,13 @@ sortedArray[])
 	printf("\nthe array after sort is:\n");
 	for (int j = 0; j < (int)sizeArray; j++)
 	{
-		printf("%s, ",arr[j]->string);
-		if (sortedArray[j] != arr[j]->string)
+		char* sorterString = myStringToCString(arr[j]);
+		printf("%s, ",sorterString);
+		if (sortedArray[j] != sorterString)
 		{
 			res = false;
 		}
+		free(sorterString);
 	}
 	if (res)
 	{
@@ -1304,13 +1308,13 @@ int main()
 		//Write
 		testMyStringWrite(str1);
 		//MyStringSort
-		char* sortedArray[3] = {"aaa","bbb","ccc"};
+		char* sortedArray[3] = {"aaa", "bbb", "ccc"};
 		myStringSetFromCString(str1, "bbb");
 		myStringSetFromCString(str2, "aaa");
 		myStringSetFromCString(str3, "ccc");
-		testMyStringSort(str1,str2,str3,sortedArray);
+		testMyStringSort(str1, str2, str3, sortedArray);
 		//MyStringCustomSort
-		testMyStringCoustomSort(str1,str2,str3,sortedArray);
+		testMyStringCoustomSort(str1, str2, str3, sortedArray);
 		//free the test strings
 		myStringFree(str1);
 		myStringFree(str2);
