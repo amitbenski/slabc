@@ -506,7 +506,6 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		j++;
 	}
 	newString[newLength] = EOL;
-	puts(newString);
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
@@ -534,23 +533,25 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	int i = 0;
-	while ((i < (int)str1->length) && (i < (int)str2->length)){
+	char* str1ToComp = myStringToCString(str1);
+	char* str2ToComp = myStringToCString(str2);
+	unsigned long i = 0;
+	while ((i < str1->length) && (i < str2->length)){
 		if (str2->string[i] < str1->string[i])
 		{
 			return COMPARE_STR1_BIGGER;
 		}
-		else if (str1->string[i] < str2->string[i])
+		else if (str1ToComp[i] < str2ToComp[i])
 		{
 			return COMPARE_STR2_BIGGER;
 		}
 		i++;
 	}
-	if (((int)str1->length == i) && ((int)str2->length == i))
+	if ((str1->length == i) && (str2->length == i))
 	{
 		return COMPARE_EQUAL;
 	}
-	if ((int)str1->length == i)
+	if (str1->length == i)
 	{
 		return COMPARE_STR2_BIGGER;
 	}
@@ -741,8 +742,7 @@ unsigned long myStringLen(const MyString *str1)
  */
 MyStringRetVal myStringWrite(const MyString *str, FILE *stream)
 {
-	char* toWrite = myStringToCString(str);
-	unsigned long bytesWritten = fwrite(toWrite, sizeof(char), str->length, stream);
+	unsigned long bytesWritten = fwrite(str->string, sizeof(char), str->length, stream);
 	if (bytesWritten < str->length)
 	{
 		return MYSTRING_ERROR;
