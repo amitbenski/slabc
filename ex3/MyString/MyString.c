@@ -150,7 +150,7 @@ static MyStringRetVal updateMyString(MyString *str, unsigned long newLength)
 			return MYSTRING_ERROR;
 		}
 		str->size = newLength;
-		//memset(str->string, '0', newLength);
+		memset(str->string, '0', newLength);
 	}
 	else if (big_Difference(str->length, newLength))
 	{
