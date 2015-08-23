@@ -315,7 +315,7 @@ char* intToStr(int num)
 	}
 
 	dCount += nDigits(num);
-	str = (char*)malloc(dCount + 1);
+	str = (char*)malloc(dCount);
 	if (str == NULL)
 	{
 		return NULL;
