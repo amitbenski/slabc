@@ -274,7 +274,7 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(str->string, cString, newLength);
+	memcpy(str->string, cString, str->length);
 	return MYSTRING_SUCCESS;
 }
 
