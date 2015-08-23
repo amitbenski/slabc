@@ -13,7 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9ac983b7-d5ea-4669-96a3-7afba66b722b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyString.c" afterPath="$PROJECT_DIR$/MyString.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../ex1/nimgame/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../ex1/nimgame/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MyString.iws" />
@@ -58,22 +57,10 @@
       <file leaf-file-name="MyString.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyString.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.5272727">
-              <caret line="821" column="89" selection-start-line="821" selection-start-column="89" selection-end-line="821" selection-end-column="89" />
+            <state vertical-scroll-proportion="0.1904762">
+              <caret line="1199" column="77" selection-start-line="1199" selection-start-column="77" selection-end-line="1199" selection-end-column="77" />
               <folding>
                 <element signature="e#74#95#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyStringFix.c" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MyStringFix.c">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="307" column="5" selection-start-line="307" selection-start-column="5" selection-end-line="307" selection-end-column="5" />
-              <folding>
-                <element signature="e#1466#1484#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -305,7 +292,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440265347325</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="sdfjdggd">
+      <created>1440312740644</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1440312740644</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -318,7 +311,7 @@
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3968504" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21732284" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3480315" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -832,20 +825,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MyStringFix.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="307" column="5" selection-start-line="307" selection-start-column="5" selection-end-line="307" selection-end-column="5" />
-          <folding>
-            <element signature="e#1466#1484#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MyString.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.5272727">
-          <caret line="821" column="89" selection-start-line="821" selection-start-column="89" selection-end-line="821" selection-end-column="89" />
+        <state vertical-scroll-proportion="0.1904762">
+          <caret line="1199" column="77" selection-start-line="1199" selection-start-column="77" selection-end-line="1199" selection-end-column="77" />
           <folding>
             <element signature="e#74#95#0" expanded="true" />
           </folding>

@@ -109,7 +109,7 @@ static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 	else
 	{
 		str->string = reallocTest;
-		memset(str->string, 0, newLength);
+		memset(str->string, '0', newLength);
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
@@ -152,7 +152,7 @@ static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned 
 			return MYSTRING_ERROR;
 		}
 		str->size = newLength;
-		memset(str->string, 0, newLength);
+		memset(str->string, '0', newLength);
 	}
 	else if (big_Difference(str->length, newLength))
 	{
@@ -486,7 +486,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 	}
 	unsigned long newLength = str1->length + str2->length;
 	char* newString = (char*)malloc((newLength)+1);
-	memset(newString, 0, newLength);
+	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -1197,7 +1197,7 @@ sortedArray[])
  * @param expectedresult expected sorted array
  * RETURN VALUE: void
   */
-static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char* sortedArray[])
+static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3, char* sortedArray[])
 {
 	puts("----------------------------------------------------------------------------");
 	unsigned long sizeArray = 3;
