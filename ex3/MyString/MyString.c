@@ -56,15 +56,15 @@ MyString * myStringAlloc()
  */
 void myStringFree(MyString *str)
 {
-	if (str != NULL)
+	if (str == NULL)
 	{
-		if (str->string != NULL)
-		{
-			free(str->string);
-			str->string = NULL;
-		}
-		free(str);
+		return;
 	}
+	if (str->string != NULL)
+	{
+		free(str->string);
+	}
+	free(str);
 }
 
 /**
@@ -100,16 +100,18 @@ MyString * myStringClone(const MyString *str)
 
 static MyStringRetVal realocate(MyString *str, unsigned long newLength)
 {
-	char* reallocTest = (char*)realloc(str->string, newLength + 1);
-	if (reallocTest == NULL)
+	str->string = (char*)realloc(str->string, newLength);
+	if (str->string == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
 
 	else
 	{
-		str->string = reallocTest;
-		memset(str->string, 0, newLength);
+//		for (int i = (int)str->length; i < (int)newLength; i++)
+//		{
+//			str->string[i] = '0';
+//		}
 		str->size = newLength;
 		return MYSTRING_SUCCESS;
 	}
@@ -124,7 +126,7 @@ static MyStringRetVal realocate(MyString *str, unsigned long newLength)
  */
 static unsigned long big_Difference(unsigned long len1, unsigned long len2)
 {
-	if (((len1 / 2) >= len2) || (len2 <= len2))
+	if (((len1 / 2) >= len2) || (len1 < len2))
 	{
 		return TRUE;
 	}
@@ -138,21 +140,21 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
  * RETURN VALUE:
  *  @return MYSTRING_ERROE if tried to realloc and failed and true otherwise
  */
-static MyStringRetVal updateMyString(MyString *str, const char* string)
+static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned long newLength)
 {
 	if (string == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long newLength = getLength(string);
 	if (str->string == NULL)
 	{
-		str->string  = (char*)malloc(newLength + 1);
+		str->string  = (char*)malloc(newLength);
 		if (str->string == NULL)
 		{
 			return MYSTRING_ERROR;
 		}
-		memset(str->string, 0, newLength);
+		str->size = newLength;
+		//memset(str->string, '0', newLength);
 	}
 	else if (big_Difference(str->length, newLength))
 	{
@@ -178,13 +180,11 @@ MyStringRetVal myStringSetFromMyString(MyString *str, const MyString *other)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	if (updateMyString(str, other->string) == MYSTRING_ERROR)
+	if (updateMyString(str, other->string, other->length) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	memcpy(str->string, other->string, str->length+1);
+	memcpy(str->string, other->string, str->length);
 	return MYSTRING_SUCCESS;
 }
 
@@ -224,7 +224,10 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 	}
 	unsigned long newLength = 0;
 	MyString* tempString = myStringAlloc();
-
+	if (tempString == NULL)
+	{
+		return MYSTRING_ERROR;
+	}
 	for (int i = 0; i < (int)str->length; i++)
 	{
 		if (!filt(&(str->string[i])))
@@ -236,8 +239,8 @@ MyStringRetVal myStringFilter(MyString *str, bool (*filt)(const char *))
 	{
 		return MYSTRING_ERROR;
 	}
+	tempString->length = newLength;
 	int tempIndex = 0;
-
 	for (int j = 0; j < (int)str->length; j++)
 	{
 		if (!filt(&(str->string[j])))
@@ -266,13 +269,12 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	if (updateMyString(str, cString) == MYSTRING_ERROR)
+	unsigned long newLength = getLength(cString);
+	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	memcpy(str->string, cString, str->length+1);
+	memcpy(str->string, cString, str->length);
 	return MYSTRING_SUCCESS;
 }
 
@@ -423,6 +425,7 @@ char * myStringToCString(const MyString *str)
 	{
 		newString[i] = str->string[i];
 	}
+	newString[str->length] = EOL;
 	return newString;
 }
 
@@ -449,6 +452,8 @@ MyStringRetVal myStringCat(MyString * dest, const MyString * src)
 		{
 			return MYSTRING_ERROR;
 		}
+		memset(dest->string,'0',newLength);
+		dest->string[newLength] = EOL;
 	}
 	else if (big_Difference(dest->length, newLength))
 	{
@@ -487,18 +492,21 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 		return  MYSTRING_ERROR;
 	}
 	unsigned long newLength = str1->length + str2->length;
-	char* newString = (char*)malloc((newLength)+1);
+	char* newString = (char*)malloc((newLength));
+	memset(newString, '0', newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
-	memcpy(newString, str1->string, str1->length + 1);
+	memcpy(newString, str1->string, str1->length);
 	int j = 0;
 	for (int i = (int) (str1->length); i < (int) (newLength); i++)
 	{
 		newString[i] = str2->string[j];
 		j++;
 	}
+	newString[newLength] = EOL;
+	puts(newString);
 	MyStringRetVal res = myStringSetFromCString(result, newString);
 	free(newString);
 	return res;
@@ -538,15 +546,18 @@ int myStringCompare(const MyString *str1, const MyString *str2)
 		}
 		i++;
 	}
-	if (str1->string[i] != EOL)
+	if (((int)str1->length == i) && ((int)str2->length == i))
 	{
-		return COMPARE_STR1_BIGGER;
+		return COMPARE_EQUAL;
 	}
-	else if (str2->string[i] != EOL)
+	if ((int)str1->length == i)
 	{
 		return COMPARE_STR2_BIGGER;
 	}
-	return COMPARE_EQUAL;
+	else
+	{
+		return COMPARE_STR1_BIGGER;
+	}
 }
 
 int comparator(char char1, char char2)
@@ -577,7 +588,7 @@ int comparator(char char1, char char2)
 int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comparator)(char,
 																						char))
 {
-	if ((str1 == NULL) || (str2 == NULL))
+	if ((str1->string == NULL) || (str2->string == NULL))
 	{
 		return MYSTR_ERROR_CODE;
 	}
@@ -587,6 +598,7 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 	}
 	int i = 0;
 	int result;
+
 	while ((i < (int)str1->length) && (i < (int)str2->length))
 	{
 		result = comparator(str1->string[i], str2->string[i]);
@@ -596,15 +608,18 @@ int myStringCustomCompare(const MyString *str1, const MyString *str2, int (*comp
 		}
 		i++;
 	}
-	if (str1->string[i] != EOL)
+	if (((int)str1->length == i) && ((int)str2->length == i))
+	{
+		return COMPARE_EQUAL;
+	}
+	if ((int)str2->length == i)
 	{
 		return COMPARE_STR1_BIGGER;
 	}
-	else if (str2->string[i] != EOL)
+	else
 	{
 		return COMPARE_STR2_BIGGER;
 	}
-	return COMPARE_EQUAL;
 }
 
 /**
@@ -624,20 +639,28 @@ int myStringEqual(const MyString *str1, const MyString *str2)
 	{
 		return MYSTR_ERROR_CODE;
 	}
-	if ((str1->string == NULL) || (str2->string == NULL))
-	{
-		return MYSTR_ERROR_CODE;
-	}
-	int result = myStringCompare(str1, str2);
-	if (result == COMPARE_EQUAL)
+	if ((str1->string == NULL) && (str2->string == NULL))
 	{
 		return EQUAL_STRS;
 	}
-	else
+	if ((str1->string == NULL) || (str2->string == NULL))
 	{
 		return NOT_EQUAL_STRS;
 	}
-
+	if (str1->length != str2->length)
+	{
+		return NOT_EQUAL_STRS;
+	}
+	int i = 0;
+	while (i < (int)str1->length)
+	{
+		if (str1->string[i] != str2->string[i])
+		{
+			return NOT_EQUAL_STRS;
+		}
+		i++;
+	}
+	return EQUAL_STRS;
 }
 
 /**
@@ -658,23 +681,28 @@ int myStringCustomEqual(const MyString *str1, const MyString *str2, int (*compar
 	{
 		return MYSTR_ERROR_CODE;
 	}
+	if (str1->string == NULL && str2->string == NULL)
+	{
+		return EQUAL_STRS;
+	}
 	if ((str1->string == NULL) || (str2->string == NULL))
 	{
-		return MYSTR_ERROR_CODE;
+		return NOT_EQUAL_STRS;
+	}
+	if (str1->length != str2->length)
+	{
+		return NOT_EQUAL_STRS;
 	}
 	int i = 0;
 	int result;
-	while ((i < (int)str1->length) && (i < (int)str2->length)){
-		result = comparator(str1->string[i],str2->string[i]);
+	while (i < (int)str1->length)
+	{
+		result = comparator(str1->string[i], str2->string[i]);
 		if (result != COMPARE_EQUAL)
 		{
 			return NOT_EQUAL_STRS;
 		}
 		i++;
-	}
-	if ((str1->string[i] != EOL) || (str2->string[i] != EOL))
-	{
-		return NOT_EQUAL_STRS;
 	}
 	return EQUAL_STRS;
 }
@@ -713,7 +741,8 @@ unsigned long myStringLen(const MyString *str1)
  */
 MyStringRetVal myStringWrite(const MyString *str, FILE *stream)
 {
-	unsigned long bytesWritten = fwrite(str->string, sizeof(char), str->length, stream);
+	char* toWrite = myStringToCString(str);
+	unsigned long bytesWritten = fwrite(toWrite, sizeof(char), str->length, stream);
 	if (bytesWritten < str->length)
 	{
 		return MYSTRING_ERROR;
@@ -801,7 +830,9 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromMyString(str2, str1);
-	if (memcmp(str1->string, str2->string, str1->size))
+	char* string1 = myStringToCString(str1);
+	char* string2 =myStringToCString(str2);
+	if (strcmp(string1,string2))
 	{
 		printf("myStringSetFromMyString method Failed, string expected %s, but is %s\n",
 			   str1->string, str2->string);
@@ -811,6 +842,8 @@ static void testMyStringSetFromMyString(MyString* str1, MyString* str2)
 		printf("myStringSetFromMyString method Succeed, string expected %s, and is %s\n",
 			   str1->string, str2->string);
 	}
+	free(string1);
+	free(string2);
 }
 
 /**
@@ -822,16 +855,20 @@ static void testMyStringClone(MyString* sourceStr, MyString* destStr)
 {
 	puts("----------------------------------------------------------------------------");
 	destStr = myStringClone(sourceStr);
-	if (memcmp(sourceStr->string, destStr->string, sourceStr->size))
+	char* destString = myStringToCString(destStr);
+	char* srcString = myStringToCString(sourceStr);
+	if (strcmp(srcString, destString))
 	{
 		printf("myStringClone method Failed, string expected %s, but is %s\n",
-			   sourceStr->string, destStr->string);
+			   srcString, destString);
 	}
 	else
 	{
 		printf("myStringClone method Succeed, string expected %s, and is %s\n",
-			   sourceStr->string, destStr->string);
+			   srcString, destString);
 	}
+	free(destString);
+	free(srcString);
 }
 
 /**
@@ -843,17 +880,18 @@ static void testMyStringFilter(MyString* stringBeforeFilt, char* stringAfterFilt
 {
 	puts("----------------------------------------------------------------------------");
 	myStringFilter(stringBeforeFilt, filt);
-	if (memcmp(stringBeforeFilt->string, stringAfterFilt, stringBeforeFilt->size))
+	char* filtString = myStringToCString(stringBeforeFilt);
+	if (strcmp(filtString, stringAfterFilt))
 	{
 		printf("MyStringFilter method Failed, string expected %s, but is %s\n",stringAfterFilt,
-			   stringBeforeFilt->string);
+			   filtString);
 	}
 	else
 	{
 		printf("MyStringFilter method Succeed, string expected %s, and is %s\n",stringAfterFilt,
-			   stringBeforeFilt->string);
+			   filtString);
 	}
-
+	free(filtString);
 }
 
 /**
@@ -866,16 +904,18 @@ static void testMyStringSetFromCString(MyString* sourceString, char* testString)
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromCString(sourceString, testString);
-	if (memcmp(sourceString->string, testString, sourceString->length))
+	char* resString = myStringToCString(sourceString);
+	if (strcmp(resString, testString))
 	{
 		printf("MyStringSetFromCString method Failed, string expected %s, but is %s\n",testString,
-			   sourceString->string);
+			   resString);
 	}
 	else
 	{
 		printf("MyStringSetFromCString method Succeed, string expected %s, and is %s\n",testString,
-			   sourceString->string);
+			   resString);
 	}
+	free(resString);
 }
 
 /**
@@ -888,16 +928,18 @@ static void testMyStringSetFromInt(MyString* testString,int num,char* numAsStrin
 {
 	puts("----------------------------------------------------------------------------");
 	myStringSetFromInt(testString, num);
-	if (memcmp(testString->string,numAsString,testString->length))
+	char* res = myStringToCString(testString);
+	if (strcmp(res, numAsString))
 	{
 		printf("MyStringSetFromInt method Failed, string expected %s, but is %s\n",numAsString,
-			   testString->string);
+			   res);
 	}
 	else
 	{
 		printf("MyStringSetFromInt method Succeed, string expected %s, and is %s\n",numAsString,
-			   testString->string);
+			   res);
 	}
+	free(res);
 }
 
 /**
@@ -955,16 +997,18 @@ static void testMyStringCat(MyString* str1, MyString* str2, char* expectedResult
 {
 	puts("----------------------------------------------------------------------------");
 	myStringCat(str1,str2);
-	if (strcmp(str1->string, expectedResult))
+	char* afterCatString = myStringToCString(str1);
+	if (strcmp(afterCatString, expectedResult))
 	{
 		printf("testMyStringCat method Failed, string expected %s, but is %s\n", expectedResult,
-			   str1->string);
+			   afterCatString);
 	}
 	else
 	{
 		printf("testMyStringCat method Succeed, string expected %s, and is %s\n", expectedResult,
-			   str1->string);
+			   afterCatString);
 	}
+	free(afterCatString);
 }
 
 /**
@@ -979,16 +1023,18 @@ static void testMyStringCatTo(MyString* str1, MyString* str2, MyString* str3, ch
 	MyStringRetVal res = myStringCatTo(str1, str2, str3);
 	if (res == MYSTRING_SUCCESS)
 	{
-		if (strcmp(str3->string, expectedResult))
+		char* testString = myStringToCString(str3);
+		if (strcmp(testString, expectedResult))
 		{
 			printf("MyStringCatTo method Failed, string expected %s, but is %s\n", expectedResult,
-				   str3->string);
+				   testString);
 		}
 		else
 		{
 			printf("MyStringCatTo method Succeed, string expected %s, and is %s\n", expectedResult,
-				   str3->string);
+				   testString);
 		}
+		free(testString);
 	}
 }
 
@@ -1167,7 +1213,9 @@ sortedArray[])
 	printf("the given array is:\n");
 	for (int i = 0; i < (int)sizeArray; i++)
 	{
-		printf("%s, ",arr[i]->string);
+		char* string = myStringToCString(arr[i]);
+		printf("%s, ",string);
+		free(string);
 	}
 
 	myStringCoustomSort(arr, sizeArray, (void*)wrapperMyStringCompare);////sort the array
@@ -1175,11 +1223,13 @@ sortedArray[])
 	printf("\nthe array after sort is:\n");
 	for (int j = 0; j < (int)sizeArray; j++)
 	{
-		printf("%s, ",arr[j]->string);
-		if (sortedArray[j] != arr[j]->string)
+		char* sorterString = myStringToCString(arr[j]);
+		printf("%s, ",sorterString);
+		if (sortedArray[j] != sorterString)
 		{
 			res = false;
 		}
+		free(sorterString);
 	}
 	if (res)
 	{
@@ -1198,7 +1248,7 @@ sortedArray[])
  * @param expectedresult expected sorted array
  * RETURN VALUE: void
   */
-static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char* sortedArray[])
+static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3, char* sortedArray[])
 {
 	puts("----------------------------------------------------------------------------");
 	unsigned long sizeArray = 3;
@@ -1207,7 +1257,9 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char
 	printf("the given array is:\n");
 	for (int i = 0; i < (int)sizeArray; i++)
 	{
-		printf("%s, ",arr[i]->string);
+		char* string = myStringToCString(arr[i]);
+		printf("%s, ",string);
+		free (string);
 	}
 
 	myStringSort(arr, 3); //sort the array
@@ -1215,19 +1267,22 @@ static void testMyStringSort(MyString* str1, MyString* str2, MyString* str3,char
 	printf("\nthe array after sort is:\n");
 	for (int j = 0; j < (int)sizeArray; j++)
 	{
-		printf("%s, ",arr[j]->string);
-		if (sortedArray[j] != arr[j]->string)
+		char* stringAfter = myStringToCString(arr[j]);
+		printf("%s, ",stringAfter);
+		if (sortedArray[j] != stringAfter)
 		{
 			res = false;
 		}
+		free(stringAfter);
 	}
+
 	if (res)
 	{
-		printf("\nMyStringCoustomSort method Failed, the array didnt sort well\n");
+		printf("\nMyStringSort method Failed, the array didnt sort well\n");
 	}
 	else
 	{
-		printf("\nMyStringCoustomSort method Succeed, the array sorted well\n");
+		printf("\nMyStringSort method Succeed, the array sorted well\n");
 	}
 }
 
@@ -1284,18 +1339,17 @@ int main()
 		//Write
 		testMyStringWrite(str1);
 		//MyStringSort
-		char* sortedArray[3] = {"aaa","bbb","ccc"};
+		char* sortedArray[3] = {"aaa", "bbb", "ccc"};
 		myStringSetFromCString(str1, "bbb");
 		myStringSetFromCString(str2, "aaa");
 		myStringSetFromCString(str3, "ccc");
-		testMyStringSort(str1,str2,str3,sortedArray);
+		testMyStringSort(str1, str2, str3, sortedArray);
 		//MyStringCustomSort
-		testMyStringCoustomSort(str1,str2,str3,sortedArray);
+		testMyStringCoustomSort(str1, str2, str3, sortedArray);
 		//free the test strings
 		myStringFree(str1);
 		myStringFree(str2);
 		myStringFree(str3);
-		puts("HOLLA");
 	}
 	return FINISH;
 }
