@@ -56,15 +56,15 @@ MyString * myStringAlloc()
  */
 void myStringFree(MyString *str)
 {
-	if (str != NULL)
+	if (str == NULL)
 	{
-		if (str->string != NULL)
-		{
-			free(str->string);
-			str->string = NULL;
-		}
-		free(str);
+		return;
 	}
+	if (str->string != NULL)
+	{
+		free(str->string);
+	}
+	free(str);
 }
 
 /**
@@ -138,13 +138,12 @@ static unsigned long big_Difference(unsigned long len1, unsigned long len2)
  * RETURN VALUE:
  *  @return MYSTRING_ERROE if tried to realloc and failed and true otherwise
  */
-static MyStringRetVal updateMyString(MyString *str, const char* string)
+static MyStringRetVal updateMyString(MyString *str, const char* string,unsigned long newLength)
 {
 	if (string == NULL)
 	{
 		return MYSTRING_ERROR;
 	}
-	unsigned long newLength = getLength(string);
 	if (str->string == NULL)
 	{
 		str->string  = (char*)malloc(newLength + 1);
@@ -152,6 +151,7 @@ static MyStringRetVal updateMyString(MyString *str, const char* string)
 		{
 			return MYSTRING_ERROR;
 		}
+		str->size = newLength;
 		memset(str->string, 0, newLength);
 	}
 	else if (big_Difference(str->length, newLength))
@@ -179,11 +179,10 @@ MyStringRetVal myStringSetFromMyString(MyString *str, const MyString *other)
 		return MYSTRING_ERROR;
 	}
 
-	if (updateMyString(str, other->string) == MYSTRING_ERROR)
+	if (updateMyString(str, other->string, other->size) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
-
 	memcpy(str->string, other->string, str->length+1);
 	return MYSTRING_SUCCESS;
 }
@@ -266,12 +265,11 @@ MyStringRetVal myStringSetFromCString(MyString *str, const char * cString)
 	{
 		return MYSTRING_ERROR;
 	}
-
-	if (updateMyString(str, cString) == MYSTRING_ERROR)
+	unsigned long newLength = getLength(cString);
+	if (updateMyString(str, cString, newLength) == MYSTRING_ERROR)
 	{
 		return MYSTRING_ERROR;
 	}
-
 	memcpy(str->string, cString, str->length+1);
 	return MYSTRING_SUCCESS;
 }
@@ -488,6 +486,7 @@ MyStringRetVal myStringCatTo(const MyString *str1, const MyString *str2, MyStrin
 	}
 	unsigned long newLength = str1->length + str2->length;
 	char* newString = (char*)malloc((newLength)+1);
+	memset(newString, 0, newLength);
 	if (newString == NULL)
 	{
 		return MYSTRING_ERROR;
@@ -1295,7 +1294,6 @@ int main()
 		myStringFree(str1);
 		myStringFree(str2);
 		myStringFree(str3);
-		puts("HOLLA");
 	}
 	return FINISH;
 }
